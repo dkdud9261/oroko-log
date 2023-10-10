@@ -1,11 +1,12 @@
 package com.ay.oroko.api.controller
 
+import com.ay.oroko.api.model.BoardRequest
 import com.ay.oroko.api.model.BoardResponse
-import com.ay.oroko.common.domain.Board
 import com.ay.oroko.api.service.BoardService
 import org.springframework.data.domain.PageRequest
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -19,7 +20,9 @@ class BoardController(
 ) {
 
     @PostMapping
-    fun createBoard(): Mono<Board> = boardService.save()
+    fun createBoard(
+        @RequestBody boardRequest: BoardRequest
+    ): Mono<BoardResponse> = boardService.save(boardRequest)
 
     @GetMapping("/list")
     fun findBoard(

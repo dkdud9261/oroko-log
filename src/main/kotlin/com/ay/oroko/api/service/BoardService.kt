@@ -1,5 +1,6 @@
 package com.ay.oroko.api.service
 
+import com.ay.oroko.api.model.BoardRequest
 import com.ay.oroko.api.model.BoardResponse
 import com.ay.oroko.common.domain.Board
 import com.ay.oroko.api.repository.BoardRepository
@@ -13,7 +14,13 @@ class BoardService(
     private val boardRepository: BoardRepository
 ) {
 
-    fun save(): Mono<Board> = boardRepository.save(Board("1", "testTitle", "/here"))
+    fun save(boardRequest: BoardRequest): Mono<BoardResponse> = boardRepository.save(
+        Board(
+            "${System.currentTimeMillis()}",
+            boardRequest.title,
+            boardRequest.contentPath
+        )
+    ).flatMap { Mono.just(BoardResponse(it)) }
 
     fun read(pageable: Pageable): Flux<BoardResponse> = boardRepository.findAll(pageable)
         .flatMapSequential { Mono.just(BoardResponse(it)) }
