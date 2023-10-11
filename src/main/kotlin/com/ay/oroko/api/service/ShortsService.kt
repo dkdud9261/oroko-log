@@ -12,12 +12,12 @@ import reactor.core.publisher.Mono
 class ShortsService(
     private val shortsRepository: ShortsRepository
 ) {
-
-    fun write(content: String) {
-        shortsRepository.save(Shorts("1", content)).subscribe()
+    fun write(content: String): Mono<ShortsResponse> {
+        return shortsRepository.save(Shorts(content = content))
+            .flatMap { Mono.just(ShortsResponse(it)) }
     }
 
-    fun read(pageable: Pageable) : Flux<ShortsResponse> {
+    fun read(pageable: Pageable): Flux<ShortsResponse> {
         return shortsRepository.findAll(pageable)
             .flatMapSequential { Mono.just(ShortsResponse(it)) }
     }

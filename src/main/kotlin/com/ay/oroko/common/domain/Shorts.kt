@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 @Document(collection = "shorts")
 data class Shorts(
-    @Id val shortsId : String,
+    @Id val shortsId : String = "${System.currentTimeMillis()}",
     val content : String,
     val createdAt : LocalDateTime = LocalDateTime.now()
 )

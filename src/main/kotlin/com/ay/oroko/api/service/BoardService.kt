@@ -13,15 +13,17 @@ import reactor.core.publisher.Mono
 class BoardService(
     private val boardRepository: BoardRepository
 ) {
+    fun save(boardRequest: BoardRequest): Mono<BoardResponse> {
+        return boardRepository.save(
+            Board(
+                title = boardRequest.title,
+                contentPath = boardRequest.contentPath
+            )
+        ).flatMap { Mono.just(BoardResponse(it)) }
+    }
 
-    fun save(boardRequest: BoardRequest): Mono<BoardResponse> = boardRepository.save(
-        Board(
-            "${System.currentTimeMillis()}",
-            boardRequest.title,
-            boardRequest.contentPath
-        )
-    ).flatMap { Mono.just(BoardResponse(it)) }
-
-    fun read(pageable: Pageable): Flux<BoardResponse> = boardRepository.findAll(pageable)
-        .flatMapSequential { Mono.just(BoardResponse(it)) }
+    fun read(pageable: Pageable): Flux<BoardResponse> {
+        return boardRepository.findAll(pageable)
+            .flatMapSequential { Mono.just(BoardResponse(it)) }
+    }
 }
