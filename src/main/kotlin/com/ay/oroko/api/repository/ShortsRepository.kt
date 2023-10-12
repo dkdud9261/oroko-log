@@ -7,8 +7,11 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import reactor.core.publisher.Flux
+import java.time.LocalDateTime
 
-interface ShortsRepository : ReactiveMongoRepository<Shorts, String>, CustomShortsRepository
+interface ShortsRepository : ReactiveMongoRepository<Shorts, String>, CustomShortsRepository {
+    fun findAllByCreatedAtBetween(from: LocalDateTime, to: LocalDateTime): Flux<Shorts>
+}
 
 interface CustomShortsRepository {
     fun findAll(pageable: Pageable) : Flux<Shorts>
