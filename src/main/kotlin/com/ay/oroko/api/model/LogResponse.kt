@@ -2,14 +2,14 @@ package com.ay.oroko.api.model
 
 data class LogResponse(
     val month: Int,
-    val logs: HashMap<Int, Int>
+    val logs: MutableMap<Int, Int>
 ) {
     constructor(month: Int) : this(
         month = month,
-        logs = HashMap()
+        logs = hashMapOf()
     )
 
     fun put(month:Int) {
-        logs.replace(month, logs[month]?.plus(1) ?: 1)
+        logs[month] = logs[month]?.plus(1) ?: 1
     }
 }

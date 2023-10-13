@@ -25,7 +25,7 @@ class ShortsService(
             .flatMapSequential { Mono.just(ShortsResponse(it)) }
     }
 
-    fun getDailyBoardLog(date: LocalDate) : Flux<Shorts> {
+    fun getDailyShortsLog(date: LocalDate) : Flux<Shorts> {
         val baseDate: LocalDate = LocalDate.of(date.year, date.month, 1)
         val baseTime: LocalTime = LocalTime.of(0, 0)
 

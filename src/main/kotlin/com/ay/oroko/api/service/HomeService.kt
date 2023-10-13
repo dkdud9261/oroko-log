@@ -16,7 +16,7 @@ class HomeService(
 
     fun getLog(date: LocalDate): Mono<LogResponse> {
         val boardLog: Flux<Board> = boardService.getDailyBoardLog(date)
-        val shortsLog: Flux<Shorts> = shortsService.getDailyBoardLog(date)
+        val shortsLog: Flux<Shorts> = shortsService.getDailyShortsLog(date)
 
         return Mono.just(with(LogResponse(date.monthValue)) {
             boardLog.subscribe {
