@@ -1,8 +1,6 @@
 package com.ay.oroko.api.service
 
 import com.ay.oroko.api.model.LogResponse
-import com.ay.oroko.common.domain.Board
-import com.ay.oroko.common.domain.Shorts
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -15,17 +13,19 @@ class HomeService(
 ) {
 
     fun getLog(date: LocalDate): Mono<LogResponse> {
-        val boardLog: Flux<Board> = boardService.getDailyBoardLog(date)
-        val shortsLog: Flux<Shorts> = shortsService.getDailyShortsLog(date)
+        val logResponse = LogResponse(date.monthValue)
 
-        return Mono.just(with(LogResponse(date.monthValue)) {
-            boardLog.subscribe {
-                this.put(it.createdAt.dayOfMonth)
+        val boardLogs = boardService.getDailyBoardLog(date)
+            .flatMap {
+                logResponse.put(it.createdAt.dayOfMonth)
             }
-            shortsLog.subscribe {
-                this.put(it.createdAt.dayOfMonth)
+
+        val shortsLogs = shortsService.getDailyShortsLog(date)
+            .flatMap {
+                logResponse.put(it.createdAt.dayOfMonth)
             }
-            this
-        })
+
+        return Flux.concat(boardLogs, shortsLogs)
+            .last()
     }
 }

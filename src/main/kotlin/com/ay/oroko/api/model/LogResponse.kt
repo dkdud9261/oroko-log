@@ -1,5 +1,7 @@
 package com.ay.oroko.api.model
 
+import reactor.core.publisher.Mono
+
 data class LogResponse(
     val month: Int,
     val logs: MutableMap<Int, Int>
@@ -9,7 +11,8 @@ data class LogResponse(
         logs = hashMapOf()
     )
 
-    fun put(month:Int) {
+    fun put(month:Int): Mono<LogResponse> {
         logs[month] = logs[month]?.plus(1) ?: 1
+        return Mono.just(this)
     }
 }
