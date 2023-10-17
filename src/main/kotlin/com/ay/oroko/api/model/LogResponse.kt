@@ -8,7 +8,7 @@ data class LogResponse(
 ) {
     constructor(month: Int) : this(
         month = month,
-        logs = hashMapOf()
+        logs = sortedMapOf()
     )
 
     fun put(month:Int): Mono<LogResponse> {
