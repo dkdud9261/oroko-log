@@ -45,7 +45,7 @@ class HomeServiceTest {
 
         homeService.getLog(date)
             .`as`(StepVerifier::create)
-            .expectNextMatches { it.logs == mutableMapOf(17 to 5) }
+            .expectNextMatches { it.logs == mutableMapOf(date.dayOfMonth to 5) }
             .verifyComplete()
     }
 }
